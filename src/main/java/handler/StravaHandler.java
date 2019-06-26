@@ -11,12 +11,17 @@ public class StravaHandler {
         this.api = api;
     }
 
-    public Object callback(Request request, Response response) {
-        return null;
+    public String callback(Request request, Response response) throws Exception {
+        String code = request.queryParams("code");
+        api.code(code).exchangeToken(true);
+        response.status(200);
+        response.type("application/json");
+        return "success";
+
     }
 
-    public Object openLogin(Request request, Response response) {
-        String callbackUrl = request.scheme() + "://" + request.host() + "/callback";
+    public Response openLogin(Request request, Response response) {
+        String callbackUrl = request.scheme() + "://" + request.host() + "/strava/callback";
         response.redirect(api.loginUrl(callbackUrl));
         return response;
     }
