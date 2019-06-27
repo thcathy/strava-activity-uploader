@@ -5,8 +5,6 @@ import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Optional;
-
 public class StravaApi {
     private final static Logger log = LoggerFactory.getLogger(StravaApi.class);
 
@@ -14,7 +12,10 @@ public class StravaApi {
             "https://www.strava.com/oauth/authorize?" +
             "client_id=%s&redirect_uri=%s&response_type=code&scope=activity:write";
 
-    static private final String TOKEN_URL = "https://www.strava.com/oauth/token";
+    static private final String STRAVA_HOST = "https://www.strava.com";
+    static private final String API_VERSION = "/api/v3";
+    static private final String TOKEN_URL = STRAVA_HOST + "/oauth/token";
+    static private final String GET_ATHLETE_URL = STRAVA_HOST + API_VERSION + "/athlete";
 
     static private final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
@@ -50,6 +51,17 @@ public class StravaApi {
         return String.format(LOGIN_URL_TEMPLATE, clientId, redirectUri);
     }
 
+    public String getAthlete() throws Exception {
+        Request request = new Request.Builder()
+                .url(GET_ATHLETE_URL)
+                .header("Authorization", "Bearer " + token.access_token)
+                .build();
+
+        try (Response response = httpClient.newCall(request).execute()) {
+            return response.body().string();
+        }
+    }
+
     public Token exchangeToken(boolean init) throws Exception {
         RequestBody body = RequestBody.create(JSON, createTokenRequestBody(init));
         var request = new Request.Builder().url(TOKEN_URL)
@@ -58,16 +70,18 @@ public class StravaApi {
 
         try (Response response = httpClient.newCall(request).execute()) {
             if (response.isSuccessful()) {
-                token = gson.fromJson(response.body().string(), Token.class);
+                var responseBody = response.body().string();
+                log.info("Get new token: {}", body);
+                token = gson.fromJson(responseBody, Token.class);
                 return token;
             } else {
-                throw new RuntimeException("Cannot exchange token from strava");
+                throw new RuntimeException(response.code() + ": " + response.body().string());
             }
         }
     }
 
     private String createTokenRequestBody(boolean init) {
-        var body = new ExchangeTokenRequest();
+        var body = new ExchangeTokenRequest(this);
         body.grantType(init ? "authorization_code" : "refresh_token");
         return gson.toJson(body);
     }
@@ -86,10 +100,10 @@ public class StravaApi {
         private String code;
         private String grant_type;
 
-        ExchangeTokenRequest() {
+        ExchangeTokenRequest(StravaApi api) {
             this.client_id = clientId;
             this.client_secret = clientSecret;
-            this.code = code;
+            this.code = api.code;
         }
 
         ExchangeTokenRequest grantType(String grantType) {

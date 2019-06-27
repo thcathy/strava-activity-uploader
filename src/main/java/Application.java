@@ -1,6 +1,5 @@
 import api.StravaApi;
 import com.google.gson.Gson;
-import handler.ExceptionHandler;
 import handler.StravaHandler;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
@@ -21,10 +20,9 @@ public class Application {
         var stravaHandler = new StravaHandler(stravaApi);
 
         path("/strava", () -> {
-            get("/callback", (i, o) -> stravaHandler.callback(i, o), gson::toJson);
+            get("/callback", (i, o) -> stravaHandler.callback(i, o));
             get("/login", (i, o) -> stravaHandler.openLogin(i, o));
+            get("/athlete", (i, o) -> stravaHandler.getAthlete(i, o));
         });
-
-        exception(Exception.class, (exception, request, response) -> new ExceptionHandler(gson));
     }
 }
