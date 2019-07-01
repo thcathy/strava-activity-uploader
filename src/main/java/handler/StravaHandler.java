@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import spark.Request;
 import spark.Response;
 
+import static handler.HandlerUtils.processException;
+
 public class StravaHandler {
     private final static Logger log = LoggerFactory.getLogger(StravaHandler.class);
 
@@ -33,12 +35,6 @@ public class StravaHandler {
         } catch (Exception e) {
             return processException(response, e);
         }
-    }
-
-    private String processException(Response response, Exception e) {
-        log.error("cannot process", e);
-        response.status(500);
-        return "fail: " + e.getMessage();
     }
 
     public Response openLogin(Request request, Response response) {
