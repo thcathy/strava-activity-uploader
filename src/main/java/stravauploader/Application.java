@@ -1,7 +1,9 @@
-import api.StravaApi;
+package stravauploader;
+
+import stravauploader.api.StravaApi;
 import com.google.gson.Gson;
-import handler.StravaHandler;
-import io.TokenStore;
+import stravauploader.handler.StravaHandler;
+import stravauploader.io.TokenStore;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

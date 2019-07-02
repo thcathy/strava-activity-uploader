@@ -1,7 +1,7 @@
-package api;
+package stravauploader.api;
 
 import com.google.gson.Gson;
-import io.TokenStore;
+import stravauploader.io.TokenStore;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,7 @@ public class StravaApi {
             "client_id=%s&redirect_uri=%s&response_type=code&scope=activity:write";
 
     static String host = "https://www.strava.com";
-    static final String API_VERSION = "/api/v3";
+    static final String API_VERSION = "/stravauploader/api/v3";
     static final String TOKEN_URL = "/oauth/token";
     static final String GET_ATHLETE_URL = API_VERSION + "/athlete";
 

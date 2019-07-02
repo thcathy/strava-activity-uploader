@@ -1,3 +1,5 @@
+package stravauploader;
+
 import jodd.mail.EmailFilter;
 import jodd.mail.ImapServer;
 import jodd.mail.MailServer;

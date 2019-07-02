@@ -1,12 +1,12 @@
-package handler;
+package stravauploader.handler;
 
-import api.StravaApi;
+import stravauploader.api.StravaApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spark.Request;
 import spark.Response;
 
-import static handler.HandlerUtils.processException;
+import static stravauploader.handler.HandlerUtils.processException;
 
 public class StravaHandler {
     private final static Logger log = LoggerFactory.getLogger(StravaHandler.class);

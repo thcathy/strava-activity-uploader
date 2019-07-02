@@ -1,4 +1,4 @@
-package api;
+package stravauploader.api;
 
 import okhttp3.OkHttpClient;
 import okhttp3.mockwebserver.MockResponse;

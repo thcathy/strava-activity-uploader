@@ -1,4 +1,4 @@
-package io;
+package stravauploader.io;
 
 import java.io.File;
 import java.io.IOException;

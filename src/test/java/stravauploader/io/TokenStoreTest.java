@@ -1,4 +1,4 @@
-package io;
+package stravauploader.io;
 
 import org.junit.Test;
 
