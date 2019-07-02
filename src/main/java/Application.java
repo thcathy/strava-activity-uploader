@@ -1,6 +1,7 @@
 import api.StravaApi;
 import com.google.gson.Gson;
 import handler.StravaHandler;
+import io.TokenStore;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +15,11 @@ public class Application {
     public static void main(String[] args) {
         var httpClient = new OkHttpClient();
         var gson = new Gson();
+        var straveTokenStore = new TokenStore("strava-token");
         var stravaApi = new StravaApi(System.getenv("STRAVA_CLIENT_ID"), System.getenv("STRAVA_CLIENT_SECRET"))
                 .httpClient(httpClient)
-                .gson(gson);
+                .gson(gson)
+                .tokenStore(straveTokenStore);
         var stravaHandler = new StravaHandler(stravaApi);
 
         var mailService = new MailClient()
@@ -29,6 +32,8 @@ public class Application {
             get("/login", (i, o) -> stravaHandler.openLogin(i, o));
             get("/athlete", (i, o) -> stravaHandler.getAthlete(i, o));
         });
+
+        stravaApi.loadToken();
 
         try {
             mailService.connect();
