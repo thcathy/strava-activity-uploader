@@ -37,6 +37,7 @@ public class StravaApiTest {
     public void getAthlete_withToken_willReturnContent() throws Exception {
         server.enqueue(new MockResponse().setBody("testing"));
         stravaApi.token = new StravaApi.Token();
+        stravaApi.token.expires_at = "0";
         assertThat(stravaApi.getAthlete()).isEqualTo("testing");
     }
 }
