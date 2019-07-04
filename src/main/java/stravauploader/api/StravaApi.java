@@ -65,7 +65,7 @@ public class StravaApi {
     }
 
     private boolean isTokenExpired() {
-        return token == null || Long.valueOf(token.expires_at) * 1000 > System.currentTimeMillis();
+        return token != null && Long.valueOf(token.expires_at) * 1000 < System.currentTimeMillis();
     }
 
     public Token exchangeToken(boolean init) throws Exception {
