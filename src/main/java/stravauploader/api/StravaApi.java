@@ -1,10 +1,14 @@
 package stravauploader.api;
 
 import com.google.gson.Gson;
-import stravauploader.io.TokenStore;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import spark.utils.StringUtils;
+import stravauploader.io.TokenStore;
+import stravauploader.model.File;
+
+import java.io.IOException;
 
 public class StravaApi {
     final static Logger log = LoggerFactory.getLogger(StravaApi.class);
@@ -17,6 +21,7 @@ public class StravaApi {
     static final String API_VERSION = "/api/v3";
     static final String TOKEN_URL = "/oauth/token";
     static final String GET_ATHLETE_URL = API_VERSION + "/athlete";
+    static final String UPLOAD_URL = API_VERSION + "/uploads";
 
     static private final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
@@ -52,13 +57,17 @@ public class StravaApi {
     private String getAccessToken() {
         if (isTokenExpired())
             refreshToken();
-        
-        return token.access_token;
+
+        if (token != null && StringUtils.isNotEmpty(token.access_token))
+            return token.access_token;
+        else
+            throw new RuntimeException("Access token is empty");
     }
 
     private void refreshToken() {
         try {
-            exchangeToken(false);
+            if (token != null && StringUtils.isNotEmpty(token.refresh_token))
+                exchangeToken(false);
         } catch (Exception e) {
             throw new RuntimeException("cannot refresh token", e);
         }
@@ -135,12 +144,51 @@ public class StravaApi {
         }
     }
 
+    public UploadActivityResponse uploadActivity(File file) {
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("file", file.name,
+                        RequestBody.create(MediaType.parse("multipart/form-data"), file.content))
+                .addFormDataPart("data_type", file.type)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(host + UPLOAD_URL)
+                .header("Authorization", "Bearer " + getAccessToken())
+                .post(requestBody)
+                .build();
+
+        try {
+            Response response = httpClient.newCall(request).execute();
+            var responseBody = response.body().string();
+            log.info("uploadActivity: response: {}", responseBody);
+            if (response.isSuccessful()) {
+                return gson.fromJson(responseBody, UploadActivityResponse.class);
+            } else {
+                throw new RuntimeException("Cannot upload activity: " + file);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean withoutToken() {
+        return token == null || StringUtils.isEmpty(token.access_token);
+    }
+
     static class Token {
         String token_type;
         String access_token;
         String refresh_token;
         String expires_at;
         String state;
+    }
+
+    public static class UploadActivityResponse {
+        long id;
+        String external_id;
+        String error;
+        String status;
+        String activity_id;
     }
 
     class ExchangeTokenRequest {

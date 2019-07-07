@@ -1,12 +1,17 @@
 package stravauploader;
 
-import stravauploader.api.StravaApi;
 import com.google.gson.Gson;
-import stravauploader.handler.StravaHandler;
-import stravauploader.io.TokenStore;
 import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import stravauploader.api.StravaApi;
+import stravauploader.handler.StravaHandler;
+import stravauploader.io.TokenStore;
+
+import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import static spark.Spark.get;
 import static spark.Spark.path;
@@ -24,25 +29,35 @@ public class Application {
                 .tokenStore(straveTokenStore);
         var stravaHandler = new StravaHandler(stravaApi);
 
-        var mailService = new MailClient()
+        var mailClient = new MailClient()
                                 .setHost(System.getenv("MAIL_HOST"))
                                 .setUsername(System.getenv("MAIL_USERNAME"))
                                 .setPassword(System.getenv("MAIL_PASSWORD"));
+
+        var stravaUploader = new StravaUploader();
+        stravaUploader.stravaApi = stravaApi;
+        stravaUploader.mailClient = mailClient;
+
+        // default to 5 minutes
+        var jobPeriod = Optional.ofNullable(System.getenv("JOB_PERIOD_IN_SECOND")).orElse("300");
 
         path("/strava", () -> {
             get("/callback", (i, o) -> stravaHandler.callback(i, o));
             get("/login", (i, o) -> stravaHandler.openLogin(i, o));
             get("/athlete", (i, o) -> stravaHandler.getAthlete(i, o));
+            get("/check-mail-and-upload", (i, o) -> stravaUploader.checkEmailAndUploadActivity());
         });
 
+        // init application
         stravaApi.loadToken();
-
         try {
-            mailService.connect();
-            mailService.readEmails();
+            mailClient.connect();
         } catch (Exception e) {
-            log.error("Error when reading emails", e);
+            log.error("Cannot connect to email server", e);
+            System.exit(-1);
         }
 
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        executor.scheduleAtFixedRate(() -> stravaUploader.checkEmailAndUploadActivity(), 10, Long.valueOf(jobPeriod), TimeUnit.SECONDS);
     }
 }

@@ -1,9 +1,6 @@
 package stravauploader;
 
-import jodd.mail.EmailFilter;
-import jodd.mail.ImapServer;
-import jodd.mail.MailServer;
-import jodd.mail.ReceiveMailSession;
+import jodd.mail.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +25,7 @@ public class MailClient {
         log.info("Connected to {}", host);
     }
 
-    public void readEmails() {
+    public ReceivedEmail[] readEmails() {
         ReceiveMailSession session = server.createSession();
         session.open();
         var emails = session
@@ -37,9 +34,10 @@ public class MailClient {
                 .filter(EmailFilter.filter().flag(Flags.Flag.SEEN, false))
                 .get();
         for (var email : emails) {
-            log.info("{}: {}", email.subject(), email.originalMessage());
+            log.info("received mail: {}: {}", email.subject(), email.originalMessage());
         }
         session.close();
+        return emails;
     }
 
     public MailClient setHost(String host) {
