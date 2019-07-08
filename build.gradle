@@ -1,4 +1,5 @@
 plugins {
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
     id 'java'
 }
 
@@ -9,6 +10,17 @@ sourceCompatibility = 1.10
 
 repositories {
     mavenCentral()
+}
+
+jar {
+    archiveName = 'strava-activity-uploader.jar'
+    manifest {
+        attributes 'Main-Class': 'stravaupload.Application'
+    }
+}
+
+shadowJar{
+    archiveName = "strava-activity-uploader.${extension}"
 }
 
 dependencies {
