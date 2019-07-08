@@ -8,7 +8,6 @@ import stravauploader.api.StravaApi;
 import stravauploader.handler.StravaHandler;
 import stravauploader.io.TokenStore;
 
-import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -23,27 +22,28 @@ public class Application {
         var httpClient = new OkHttpClient();
         var gson = new Gson();
         var straveTokenStore = new TokenStore("strava-token");
-        var stravaApi = new StravaApi(System.getenv("STRAVA_CLIENT_ID"), System.getenv("STRAVA_CLIENT_SECRET"))
+        var stravaApi = new StravaApi(System.getProperty("strava.client_id"), System.getProperty("strava.client_secret"))
                 .httpClient(httpClient)
                 .gson(gson)
                 .tokenStore(straveTokenStore);
         var stravaHandler = new StravaHandler(stravaApi);
 
         var mailClient = new MailClient()
-                                .setHost(System.getenv("MAIL_HOST"))
-                                .setUsername(System.getenv("MAIL_USERNAME"))
-                                .setPassword(System.getenv("MAIL_PASSWORD"));
+                                .setHost(System.getProperty("mail.host"))
+                                .setUsername(System.getProperty("mail.username"))
+                                .setPassword(System.getProperty("mail.password"));
 
         var stravaUploader = new StravaUploader();
         stravaUploader.stravaApi = stravaApi;
         stravaUploader.mailClient = mailClient;
 
         // default to 5 minutes
-        var jobPeriod = Optional.ofNullable(System.getenv("JOB_PERIOD_IN_SECOND")).orElse("300");
+        var jobPeriod = System.getProperty("job.period.second", "300");
 
         path("/strava", () -> {
             get("/callback", (i, o) -> stravaHandler.callback(i, o));
             get("/login", (i, o) -> stravaHandler.openLogin(i, o));
+            get("/athlete", (i, o) -> stravaHandler.getAthlete(i, o));
             get("/athlete", (i, o) -> stravaHandler.getAthlete(i, o));
             get("/check-mail-and-upload", (i, o) -> stravaUploader.checkEmailAndUploadActivity());
         });
