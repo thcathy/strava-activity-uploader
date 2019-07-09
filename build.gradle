@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'me.thc'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 sourceCompatibility = 1.10
 
@@ -13,9 +13,8 @@ repositories {
 }
 
 jar {
-    archiveName = 'strava-activity-uploader.jar'
     manifest {
-        attributes 'Main-Class': 'stravaupload.Application'
+        attributes 'Main-Class': 'stravauploader.Application'
     }
 }
 
