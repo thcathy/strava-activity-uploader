@@ -22,16 +22,16 @@ public class Application {
         var httpClient = new OkHttpClient();
         var gson = new Gson();
         var straveTokenStore = new TokenStore("strava-token");
-        var stravaApi = new StravaApi(System.getProperty("strava.client_id"), System.getProperty("strava.client_secret"))
+        var stravaApi = new StravaApi(ApplicationConfig.getStravaClientId(), ApplicationConfig.getStravaClientSecret())
                 .httpClient(httpClient)
                 .gson(gson)
                 .tokenStore(straveTokenStore);
         var stravaHandler = new StravaHandler(stravaApi);
 
         var mailClient = new MailClient()
-                                .setHost(System.getProperty("mail.host"))
-                                .setUsername(System.getProperty("mail.username"))
-                                .setPassword(System.getProperty("mail.password"));
+                                .setHost(ApplicationConfig.getMailHost())
+                                .setUsername(ApplicationConfig.getMailUsername())
+                                .setPassword(ApplicationConfig.getMailPassword());
 
         var stravaUploader = new StravaUploader();
         stravaUploader.stravaApi = stravaApi;
