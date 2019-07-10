@@ -20,9 +20,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 public class StravaApiTest {
-    static StravaApi stravaApi = new StravaApi("id", "secret");
-    static MockWebServer server = new MockWebServer();
-    static Gson gson = new Gson();
+    StravaApi stravaApi = new StravaApi("id", "secret");
+    MockWebServer server = new MockWebServer();
+    Gson gson = new Gson();
 
     @Mock
     TokenStore tokenStore;
@@ -30,21 +30,17 @@ public class StravaApiTest {
     @Rule
     public ExpectedException expectedEx = ExpectedException.none();
 
-    @BeforeClass
-    public static void beforeTest() throws IOException {
-        server.start();
-        stravaApi.host = server.url("").toString();
-        stravaApi.httpClient = new OkHttpClient();
-        stravaApi.gson = gson;
-    }
-
-    @AfterClass
-    public static void afterTest() throws IOException {
+    @After
+    public void afterTest() throws IOException {
         server.shutdown();
     }
 
     @Before
-    public void setup() {
+    public void setup() throws IOException {
+        server.start();
+        stravaApi.host = server.url("").toString();
+        stravaApi.httpClient = new OkHttpClient();
+        stravaApi.gson = gson;
         MockitoAnnotations.initMocks(this);
     }
 
@@ -52,6 +48,15 @@ public class StravaApiTest {
     public void test_loginUrl() {
         assertThat(stravaApi.loginUrl("http://test"))
                 .isEqualTo("https://www.strava.com/oauth/authorize?client_id=id&redirect_uri=http://test&response_type=code&scope=activity:write");
+    }
+
+    @Test
+    public void initToken_withCode_shouldGetANewToken() throws Exception {
+        server.enqueue(new MockResponse().setBody(getValidTokenResponse()));
+        stravaApi.code = "testing_code";
+        stravaApi.exchangeToken(true);
+
+        assertThat(stravaApi.token.access_token).isEqualTo("471816b123b8ad4dd304c1cdf130aa50a12e559f");
     }
 
     @Test
@@ -74,7 +79,7 @@ public class StravaApiTest {
 
     @Test
     public void getAthlete_withExpiredToken_willRefreshAndStoreNewOne() throws Exception {
-        server.enqueue(new MockResponse().setBody("{\"token_type\":\"Bearer\",\"expires_at\":1662093734,\"refresh_token\":\"478ab59ede93fe70bcd39e0dbc8242dfdbdc990d\",\"access_token\":\"471816b123b8ad4dd304c1cdf130aa50a12e559f\"}"));
+        server.enqueue(new MockResponse().setBody(getValidTokenResponse()));
         server.enqueue(new MockResponse().setBody("testing"));
         stravaApi.token = new StravaApi.Token();
         stravaApi.token.expires_at = "1530708000";
@@ -106,6 +111,10 @@ public class StravaApiTest {
         } catch (Exception e) {
             assertThat(e.getMessage()).isEqualTo("Access token is empty");
         }
+    }
+
+    private String getValidTokenResponse() {
+        return "{\"token_type\":\"Bearer\",\"expires_at\":1662093734,\"refresh_token\":\"478ab59ede93fe70bcd39e0dbc8242dfdbdc990d\",\"access_token\":\"471816b123b8ad4dd304c1cdf130aa50a12e559f\"}";
     }
 
     private StravaApi.UploadActivityResponse getUploadSuccessResponse() {

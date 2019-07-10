@@ -107,7 +107,7 @@ public class StravaApi {
     private String createTokenRequestBody(boolean init) {
         var body = new ExchangeTokenRequest(this);
         body.grantType(init ? "authorization_code" : "refresh_token");
-        if (init) {
+        if (!init) {
             body.refresh_token = token.refresh_token;
         }
         return gson.toJson(body);
