@@ -34,7 +34,7 @@ jobs:
           path: ~/junit
       - run:
           name: Build Artifacts
-          command: ./gradlew assemble
+          command: ./gradlew assemble shadowJar
       - persist_to_workspace:
           root: ~/
           paths: 
