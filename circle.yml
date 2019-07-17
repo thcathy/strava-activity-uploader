@@ -9,7 +9,7 @@ jobs:
         environment:
               TERM: dumb
     environment:
-      JVM_OPTS: -Xmx3200m
+      JVM_OPTS: -Xmx4800m
     steps:
       - checkout
       - restore_cache:
