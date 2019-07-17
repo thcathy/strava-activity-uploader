@@ -19,19 +19,20 @@ public class Application {
     private final static Logger log = LoggerFactory.getLogger(Application.class);
 
     public static void main(String[] args) {
+        var config = new ApplicationConfig();
         var httpClient = new OkHttpClient();
         var gson = new Gson();
         var straveTokenStore = new TokenStore("strava-token");
-        var stravaApi = new StravaApi(ApplicationConfig.getStravaClientId(), ApplicationConfig.getStravaClientSecret())
+        var stravaApi = new StravaApi(config.getStravaClientId(), config.getStravaClientSecret())
                 .httpClient(httpClient)
                 .gson(gson)
                 .tokenStore(straveTokenStore);
-        var stravaHandler = new StravaHandler(stravaApi);
+        var stravaHandler = new StravaHandler(config, stravaApi);
 
         var mailClient = new MailClient()
-                                .setHost(ApplicationConfig.getMailHost())
-                                .setUsername(ApplicationConfig.getMailUsername())
-                                .setPassword(ApplicationConfig.getMailPassword());
+                                .setHost(config.getMailHost())
+                                .setUsername(config.getMailUsername())
+                                .setPassword(config.getMailPassword());
 
         var stravaUploader = new StravaUploader();
         stravaUploader.stravaApi = stravaApi;

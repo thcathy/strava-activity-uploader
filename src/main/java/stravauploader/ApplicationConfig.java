@@ -1,42 +1,49 @@
 package stravauploader;
 
 public class ApplicationConfig {
-    static final String stravaClientIdPropertyKey = "strava.client_id";
-    static final String stravaClientIdEnvKey = "STRAVA_CLIENT_ID";
+    final String stravaClientIdPropertyKey = "strava.client_id";
+    final String stravaClientIdEnvKey = "STRAVA_CLIENT_ID";
 
-    static final String stravaClientSecretPropertyKey = "strava.client_secret";
-    static final String stravaClientSecretEnvKey = "STRAVA_CLIENT_SECRET";
+    final String stravaClientSecretPropertyKey = "strava.client_secret";
+    final String stravaClientSecretEnvKey = "STRAVA_CLIENT_SECRET";
 
-    static final String mailHostPropertyKey = "mail.host";
-    static final String mailHostEnvKey = "MAIL_HOST";
+    final String mailHostPropertyKey = "mail.host";
+    final String mailHostEnvKey = "MAIL_HOST";
 
-    static final String mailUsernamePropertyKey = "mail.username";
-    static final String mailUsernameEnvKey = "MAIL_USERNAME";
+    final String mailUsernamePropertyKey = "mail.username";
+    final String mailUsernameEnvKey = "MAIL_USERNAME";
 
-    static final String mailPasswordPropertyKey = "mail.password";
-    static final String mailPasswordEnvKey = "MAIL_PASSWORD";
+    final String mailPasswordPropertyKey = "mail.password";
+    final String mailPasswordEnvKey = "MAIL_PASSWORD";
 
-    static String getValue(String propertyKey, String envKey) {
+    final String callbackHostPropertyKey = "callback.host";
+    final String callbackHostEnvKey = "CALLBACK_HOST";
+
+    String getValue(String propertyKey, String envKey) {
         return System.getProperty(propertyKey, System.getenv(envKey));
     }
 
-    public static String getStravaClientId() {
+    public String getCallbackHost() {
+        return getValue(callbackHostPropertyKey, callbackHostEnvKey);
+    }
+
+    public String getStravaClientId() {
         return getValue(stravaClientIdPropertyKey, stravaClientIdEnvKey);
     }
 
-    public static String getStravaClientSecret() {
+    public String getStravaClientSecret() {
         return getValue(stravaClientSecretPropertyKey, stravaClientSecretEnvKey);
     }
 
-    public static String getMailHost() {
+    public String getMailHost() {
         return getValue(mailHostPropertyKey, mailHostEnvKey);
     }
 
-    public static String getMailUsername() {
+    public String getMailUsername() {
         return getValue(mailUsernamePropertyKey, mailUsernameEnvKey);
     }
 
-    public static String getMailPassword() {
+    public String getMailPassword() {
         return getValue(mailPasswordPropertyKey, mailPasswordEnvKey);
     }
 }
