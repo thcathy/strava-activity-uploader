@@ -38,8 +38,7 @@ public class Application {
         stravaUploader.stravaApi = stravaApi;
         stravaUploader.mailClient = mailClient;
 
-        // default to 5 minutes
-        var jobPeriod = System.getProperty("job.period.second", "300");
+        var jobPeriod = config.getJobPeriod();
 
         path("/strava", () -> {
             get("/callback", (i, o) -> stravaHandler.callback(i, o));

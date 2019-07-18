@@ -1,23 +1,29 @@
 package stravauploader;
 
+import spark.utils.StringUtils;
+
 public class ApplicationConfig {
-    final String stravaClientIdPropertyKey = "strava.client_id";
-    final String stravaClientIdEnvKey = "STRAVA_CLIENT_ID";
+    private final String stravaClientIdPropertyKey = "strava.client_id";
+    private final String stravaClientIdEnvKey = "STRAVA_CLIENT_ID";
 
-    final String stravaClientSecretPropertyKey = "strava.client_secret";
-    final String stravaClientSecretEnvKey = "STRAVA_CLIENT_SECRET";
+    private final String stravaClientSecretPropertyKey = "strava.client_secret";
+    private final String stravaClientSecretEnvKey = "STRAVA_CLIENT_SECRET";
 
-    final String mailHostPropertyKey = "mail.host";
-    final String mailHostEnvKey = "MAIL_HOST";
+    private final String mailHostPropertyKey = "mail.host";
+    private final String mailHostEnvKey = "MAIL_HOST";
 
-    final String mailUsernamePropertyKey = "mail.username";
-    final String mailUsernameEnvKey = "MAIL_USERNAME";
+    private final String mailUsernamePropertyKey = "mail.username";
+    private final String mailUsernameEnvKey = "MAIL_USERNAME";
 
-    final String mailPasswordPropertyKey = "mail.password";
-    final String mailPasswordEnvKey = "MAIL_PASSWORD";
+    private final String mailPasswordPropertyKey = "mail.password";
+    private final String mailPasswordEnvKey = "MAIL_PASSWORD";
 
-    final String callbackHostPropertyKey = "callback.host";
-    final String callbackHostEnvKey = "CALLBACK_HOST";
+    private final String callbackHostPropertyKey = "callback.host";
+    private final String callbackHostEnvKey = "CALLBACK_HOST";
+
+    private final String jobPeriodPropertyKey = "job.period.second";
+    private final String jobPeriodEnvKey = "JOB_PERIOD_SECOND";
+    private final String defaultJobPeriod = "300";
 
     String getValue(String propertyKey, String envKey) {
         return System.getProperty(propertyKey, System.getenv(envKey));
@@ -46,4 +52,13 @@ public class ApplicationConfig {
     public String getMailPassword() {
         return getValue(mailPasswordPropertyKey, mailPasswordEnvKey);
     }
+
+    public String getJobPeriod() {
+        var value = getValue(jobPeriodPropertyKey, jobPeriodEnvKey);
+        if (StringUtils.isEmpty(value))
+            return defaultJobPeriod;
+        else
+            return getValue(jobPeriodPropertyKey, jobPeriodEnvKey);
+    }
+
 }
