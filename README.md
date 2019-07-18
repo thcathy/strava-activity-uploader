@@ -23,3 +23,5 @@ Suggest to use a new email address to reduce duplicate messages proceed.
 #### 2. Strava API
 Open Strava developer https://developers.strava.com
 
+TODO: continue writing
+
