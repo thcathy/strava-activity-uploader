@@ -92,7 +92,7 @@ Required | MAIL_HOST | mail.host | imap.gmail.com | Email server host
 Required | MAIL_USERNAME | mail.username | | Email account username
 Required | MAIL_PASSWORD | mail.password | | Email account password
 Optional | CALLBACK_HOST | callback.host | http://strava.myserver.com:4567 | host and port of the server which application started
-Optional | JOB_PERIOD_SECOND | job.period.second | 300 (default) | Interval of checking email
+Optional | JOB_INTERVAL_SECOND | job.interval.second | 300 (default) | Interval of checking email
 
 ## Development setup
 ### Build application

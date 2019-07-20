@@ -21,8 +21,8 @@ public class ApplicationConfig {
     private final String callbackHostPropertyKey = "callback.host";
     private final String callbackHostEnvKey = "CALLBACK_HOST";
 
-    private final String jobPeriodPropertyKey = "job.period.second";
-    private final String jobPeriodEnvKey = "JOB_PERIOD_SECOND";
+    private final String jobPeriodPropertyKey = "job.interval.second";
+    private final String jobPeriodEnvKey = "JOB_INTERVAL_SECOND";
     private final String defaultJobPeriod = "300";
 
     String getValue(String propertyKey, String envKey) {

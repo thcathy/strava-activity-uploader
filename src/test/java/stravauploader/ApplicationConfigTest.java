@@ -82,10 +82,10 @@ public class ApplicationConfigTest {
     public void test_getJobPeriod() {
         assertThat(config.getJobPeriod()).isEqualTo("300");
 
-        environmentVariables.set("JOB_PERIOD_SECOND", "env value");
+        environmentVariables.set("JOB_INTERVAL_SECOND", "env value");
         assertThat(config.getJobPeriod()).isEqualTo("env value");
 
-        System.setProperty("job.period.second", "test value");
+        System.setProperty("job.interval.second", "test value");
         assertThat(config.getJobPeriod()).isEqualTo("test value");
     }
 
