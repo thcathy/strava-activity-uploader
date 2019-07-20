@@ -24,16 +24,16 @@
 
 ## Prerequisites
 ### 1. Email account 
-Register an email address on provider with IMAP protocol. e.g. Gmail, Yahoo! Mail, Outlook.com  
-Suggest to use a new email address to reduce duplicate messages proceed.
+Register an email address on provider support IMAP protocol. e.g. Gmail, Yahoo! Mail, Outlook.com  
+Suggest to use an email address only for upload activity
 
-### 2. Create an App in Strava Settings
-Step 1: Create a Strava account if you do not have one
+### 2. Create an app account in Strava Settings
+#### Step 1: Create a Strava account if you do not have one
 
-Step 2: Go to Strava developer (https://developers.strava.com) and click "Create & Manage Your App"  
+#### Step 2: Go to Strava developer (https://developers.strava.com) and click "Create & Manage Your App"  
 ![Strava API](/image/strava-api.png)
 
-Step 3: Input following, then click "Create" 
+#### Step 3: Input following, then click "Create" 
   1. Application Name (Any)
   2. Website (Any)
   3. Authorization Callback Domain  
@@ -41,14 +41,14 @@ Step 3: Input following, then click "Create"
   
 ![Create App](/image/create-app.png)
    
-Step 4: In "My API Application" page, remember 1. "Client ID" and 2. "Client Secret" for configure the uploader  
+#### Step 4: In "My API Application" page, remember 1. "Client ID" and 2. "Client Secret" for starting uploader  
 ![App settings](/image/app-settings.png)
 
 ## How to use?
-### 1. Start the server. Either by a) docker or b) java jar 
+### 1. Start the server. Either use a) docker or b) java jar 
 #### a. By docker (recommended)
 Run docker image "thcathy/strava-activity-uploader". Replace the required environment variables.
-```bash
+```
 docker run --name strava-activity-uploader \
   -e STRAVA_CLIENT_ID=<strava's client id> \
   -e STRAVA_CLIENT_SECRET=<strava's client secret> \
@@ -60,9 +60,9 @@ docker run --name strava-activity-uploader \
 ```
 
 #### b. Java command line (require Java version 10+ installed)
-Download jar file from [release page](https://github.com/thcathy/strava-activity-uploader/releases)  
-Run java command in console
-```bash
+Download jar file from [release page](https://github.com/thcathy/strava-activity-uploader/releases). 
+Then run java command in console. Replace the required properties
+```
 java \
 -Dstrava.client_id=<strava's client id> \
 -Dstrava.client_secret=<strava's client secret> \
@@ -72,30 +72,30 @@ java \
 -jar strava-activity-uploader.jar
 ```
 
-### 2. Login to your Strava app
-Step 1: Open "localhost:4567/strava/login" (replace 'localhost:4567' if you start application in your server)  
+### 2. Login Strava in uploader
+Step 1: Open "http://localhost:4567/strava/login" (replace 'localhost:4567' if you start application in your server)  
 Step 2: Login your Strava account and Authorize the application  
 Step 3: If login successfully, browser will show "success". You can close the browser. The application will upload any activity in email periodically. 
 
-### 3. Send email with attachment to email account created in Prerequisites
+### 3. Send email with attachment to email account set in startup parameters
 Application will check email for each 3 minutes (can be changed by configuration)  
 Then upload any activity files (fit, fit.gz, tcx, tcx.gz, gpx, gpx.gz) to Strava
 
 ## Development setup
 ### Build application
 1. Clone source from github
-```bash
+```
 git clone https://github.com/thcathy/strava-activity-uploader.git
 ```
 2. Build runnable jar using gradle
-```bash
+```
 ./gradlew assemble shadowJar
 ```
 3. Jar is built in build/libs/strava-activity-uploader.jar
 
 ### Running tests
-Run all test using gradle
-```bash
+Run all tests using gradle
+```
 ./gradlew check
 ```
 
