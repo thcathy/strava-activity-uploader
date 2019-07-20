@@ -84,15 +84,16 @@ Application will check email for each 3 minutes (can be changed by configuration
 Then upload any activity files (fit, fit.gz, tcx, tcx.gz, gpx, gpx.gz) to Strava
 
 ## Application Parameters
-Required | Environment Variable | Property | Example | Description
-:--- | :--- |:--- |:--- 
-Required | STRAVA_CLIENT_ID | strava.client_id | 12345 | Client ID show in Strava API Application page
-Required | STRAVA_CLIENT_SECRET | strava.client_secret | <40 characters string> | Client Secret show in Strava API Application page
-Required | MAIL_HOST | mail.host | imap.gmail.com | Email server host
-Required | MAIL_USERNAME | mail.username | | Email account username
-Required | MAIL_PASSWORD | mail.password | | Email account password
-Optional | CALLBACK_HOST | callback.host | http://strava.myserver.com:4567 | host and port of the server which application started
-Optional | JOB_INTERVAL_SECOND | job.interval.second | 300 (default) | Interval of checking email
+
+| Required | Environment Variable | Property | Example | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| Required | STRAVA_CLIENT_ID | strava.client_id | 12345 | Client ID show in Strava API Application page |
+| Required | STRAVA_CLIENT_SECRET | strava.client_secret | <40 characters string> | Client Secret show in Strava API Application page |
+| Required | MAIL_HOST | mail.host | imap.gmail.com | Email server host |
+| Required | MAIL_USERNAME | mail.username | | Email account username |
+| Required | MAIL_PASSWORD | mail.password | | Email account password |
+| Optional | CALLBACK_HOST | callback.host | http://strava.myserver.com:4567 | host and port of the server which application started |
+| Optional | JOB_INTERVAL_SECOND | job.interval.second | 300 (default) | Interval of checking email |
 
 ## Development setup
 ### Build application
