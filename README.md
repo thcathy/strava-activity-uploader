@@ -1,5 +1,5 @@
 # strava-activity-uploader
-> A server reading zip / GPX file from email and upload to Strava periodically
+> A server reading zip / gps file from email and upload to Strava periodically
 
 [![CircleCI](https://img.shields.io/circleci/build/github/thcathy/strava-activity-uploader/master.svg)](https://circleci.com/gh/thcathy/strava-activity-uploader/tree/master)
 [![codecov](https://codecov.io/gh/thcathy/strava-activity-uploader/branch/master/graph/badge.svg)](https://codecov.io/gh/thcathy/strava-activity-uploader)
