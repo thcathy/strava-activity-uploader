@@ -17,6 +17,7 @@
 
 - [Prerequisites](#Prerequisites)
 - [How to use](#How-to-use)
+- [Application Parameters](#Application-parameters)
 - [Development setup](#Development-setup)
 - [Support or Request for new feature](#Support-or-Request-for-new-feature)
 - [Contributing](#Contributing)
@@ -47,7 +48,8 @@ Suggest to use an email address only for upload activity
 ## How to use?
 ### 1. Start the server. Either use a) docker or b) java jar 
 #### a. By docker (recommended)
-Run docker image "thcathy/strava-activity-uploader". Replace the required environment variables.
+Run docker image "thcathy/strava-activity-uploader". Replace the required environment variables.  
+Add "CALLBACK_HOST=<your server host and port>" if you start the application in your server.
 ```
 docker run --name strava-activity-uploader \
   -e STRAVA_CLIENT_ID=<strava's client id> \
@@ -81,17 +83,30 @@ Step 3: If login successfully, browser will show "success". You can close the br
 Application will check email for each 3 minutes (can be changed by configuration)  
 Then upload any activity files (fit, fit.gz, tcx, tcx.gz, gpx, gpx.gz) to Strava
 
+## Application Parameters
+Required | Environment Variable | Property | Example | Description
+:--- | :--- |:--- |:--- 
+Required | STRAVA_CLIENT_ID | strava.client_id | 12345 | Client ID show in Strava API Application page
+Required | STRAVA_CLIENT_SECRET | strava.client_secret | <40 characters string> | Client Secret show in Strava API Application page
+Required | MAIL_HOST | mail.host | imap.gmail.com | Email server host
+Required | MAIL_USERNAME | mail.username | | Email account username
+Required | MAIL_PASSWORD | mail.password | | Email account password
+Optional | CALLBACK_HOST | callback.host | http://strava.myserver.com:4567 | host and port of the server which application started
+Optional | JOB_PERIOD_SECOND | job.period.second | 300 (default) | Interval of checking email
+
 ## Development setup
 ### Build application
-1. Clone source from github
+1. Install JDK version 10+
+
+2. Clone source from github
 ```
 git clone https://github.com/thcathy/strava-activity-uploader.git
 ```
-2. Build runnable jar using gradle
+3. Build runnable jar using gradle
 ```
 ./gradlew assemble shadowJar
 ```
-3. Jar is built in build/libs/strava-activity-uploader.jar
+4. Jar is built in build/libs/strava-activity-uploader.jar
 
 ### Running tests
 Run all tests using gradle
