@@ -16,9 +16,9 @@
 ## Table of Contents
 
 - [Prerequisites](#Prerequisites)
-- [How to use](#How to use)
-- [Development setup](#Development setup)
-- [Support or Request for new feature](#Support or Request for new feature)
+- [How to use](#How-to-use)
+- [Development setup](#Development-setup)
+- [Support or Request for new feature](#Support-or-Request-for-new-feature)
 - [Contributing](#Contributing)
 - [License](#license)
 
@@ -110,4 +110,4 @@ Create new issue at [link](https://github.com/thcathy/strava-activity-uploader/i
 5. Create a new Pull Request
 
 ## License
-This project is licensed under the CPL-3.0 License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the CPL-3.0 License - see the [LICENSE](LICENSE) file for details
