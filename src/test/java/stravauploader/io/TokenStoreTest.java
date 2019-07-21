@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 public class TokenStoreTest {
     @Test
@@ -19,13 +20,24 @@ public class TokenStoreTest {
         Files.delete(Paths.get("temp/test.txt"));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void cannotSave_withThrowRuntimeException() {
-        new TokenStore("\0").save("token");
+        try {
+            new TokenStore("\0").save("token");
+            fail("did not throw exception");
+        } catch (Exception e) {
+            assertThat(e).isInstanceOf(RuntimeException.class);
+        }
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void cannotLoad_withThrowRuntimeException() {
-        new TokenStore("\0").load();
+        try {
+            new TokenStore("\0").load();
+            fail("did not throw exception");
+        } catch (Exception e){
+            assertThat(e).isInstanceOf(RuntimeException.class);
+        }
+
     }
 }
