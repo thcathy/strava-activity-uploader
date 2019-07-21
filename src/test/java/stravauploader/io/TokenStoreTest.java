@@ -18,4 +18,14 @@ public class TokenStoreTest {
 
         Files.delete(Paths.get("temp/test.txt"));
     }
+
+    @Test(expected = RuntimeException.class)
+    public void cannotSave_withThrowRuntimeException() {
+        new TokenStore("\0").save("token");
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void cannotLoad_withThrowRuntimeException() {
+        new TokenStore("\0").load();
+    }
 }

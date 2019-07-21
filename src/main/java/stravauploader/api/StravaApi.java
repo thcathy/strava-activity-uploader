@@ -140,7 +140,7 @@ public class StravaApi {
             var json = tokenStore.load();
             token = gson.fromJson(json, Token.class);
         } catch (Exception e) {
-            log.warn("cannot load token", e);
+            log.warn("cannot load token", e.toString());
         }
     }
 
