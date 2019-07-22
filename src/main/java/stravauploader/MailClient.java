@@ -13,7 +13,7 @@ public class MailClient {
     private String username;
     private String password;
 
-    private ImapServer server;
+    protected ImapServer server;
 
     public void connect() {
         log.info("Connecting to {}", host);

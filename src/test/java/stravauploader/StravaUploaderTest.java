@@ -30,8 +30,8 @@ public class StravaUploaderTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        uploader.mailClient = mailClient;
-        uploader.stravaApi = stravaApi;
+        uploader.mailClient(mailClient);
+        uploader.stravaApi(stravaApi);
     }
 
     @Test

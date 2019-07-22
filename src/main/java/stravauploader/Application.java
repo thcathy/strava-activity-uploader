@@ -34,9 +34,7 @@ public class Application {
                                 .setUsername(config.getMailUsername())
                                 .setPassword(config.getMailPassword());
 
-        var stravaUploader = new StravaUploader();
-        stravaUploader.stravaApi = stravaApi;
-        stravaUploader.mailClient = mailClient;
+        var stravaUploader = new StravaUploader().stravaApi(stravaApi).mailClient(mailClient);
 
         var jobPeriod = config.getJobPeriod();
 

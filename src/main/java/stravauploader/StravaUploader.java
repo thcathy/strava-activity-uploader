@@ -19,8 +19,8 @@ public class StravaUploader {
     final static Logger log = LoggerFactory.getLogger(StravaUploader.class);
     static List<String> supportedFileTypes = List.of("fit", "fit.gz", "tcx", "tcx.gz", "gpx", "gpx.gz", "zip");
 
-    MailClient mailClient;
-    StravaApi stravaApi;
+    protected MailClient mailClient;
+    protected StravaApi stravaApi;
 
     public List<StravaApi.UploadActivityResponse> checkEmailAndUploadActivity() {
         if (stravaApi.withoutToken()) return List.of();
