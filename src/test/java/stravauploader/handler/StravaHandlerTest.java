@@ -9,6 +9,7 @@ import spark.Response;
 import stravauploader.ApplicationConfig;
 import stravauploader.api.StravaApi;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class StravaHandlerTest {
@@ -47,5 +48,26 @@ public class StravaHandlerTest {
         handler.openLogin(request, response);
         verify(stravaApi, times(1)).loginUrl("http://google.com/strava/callback");
         verify(response, times(1)).redirect(any());
+    }
+
+    @Test
+    public void test_getAthlete() throws Exception {
+        when(stravaApi.getAthlete()).thenReturn("result");
+        var result = handler.getAthlete(null, null);
+        assertThat(result).isEqualTo("result");
+    }
+
+    @Test
+    public void test_callback() {
+        var request = mock(Request.class);
+        var response = mock(Response.class);
+        when(request.queryParams("code")).thenReturn("12345");
+        when(stravaApi.code(any())).thenReturn(stravaApi);
+        var result = handler.callback(request, response);
+
+        assertThat(result).isEqualTo("success");
+        verify(response, times(1)).status(200);
+        verify(response, times(1)).type("application/json");
+
     }
 }

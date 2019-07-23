@@ -2,6 +2,7 @@ package stravauploader.io;
 
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -38,6 +39,25 @@ public class TokenStoreTest {
         } catch (Exception e){
             assertThat(e).isInstanceOf(RuntimeException.class);
         }
+    }
 
+    @Test
+    public void save_willCreateTempDirectoryIfNotExists() {
+        var tempDir = new File("temp");
+        deleteDirectory(tempDir);
+
+        new TokenStore("test").save("token");
+        assertThat(tempDir.exists()).isTrue();
+    }
+
+    private void deleteDirectory(File dir) {
+        String[]entries = dir.list();
+        for(String s: entries){
+            File currentFile = new File(dir.getPath(),s);
+            currentFile.delete();
+        }
+        if (dir.exists()) {
+            dir.delete();
+        }
     }
 }

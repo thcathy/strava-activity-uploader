@@ -16,8 +16,7 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class StravaApiTest {
     StravaApi stravaApi = new StravaApi("id", "secret");
@@ -39,8 +38,9 @@ public class StravaApiTest {
     public void setup() throws IOException {
         server.start();
         stravaApi.host = server.url("").toString();
-        stravaApi.httpClient = new OkHttpClient();
-        stravaApi.gson = gson;
+        stravaApi
+                .httpClient(new OkHttpClient())
+                .gson(gson);
         MockitoAnnotations.initMocks(this);
     }
 
@@ -53,7 +53,7 @@ public class StravaApiTest {
     @Test
     public void initToken_withCode_shouldGetANewToken() throws Exception {
         server.enqueue(new MockResponse().setBody(getValidTokenResponse()));
-        stravaApi.code = "testing_code";
+        stravaApi.code("testing_code");
         stravaApi.exchangeToken(true);
 
         assertThat(stravaApi.token.access_token).isEqualTo("471816b123b8ad4dd304c1cdf130aa50a12e559f");
@@ -84,7 +84,7 @@ public class StravaApiTest {
         stravaApi.token = new StravaApi.Token();
         stravaApi.token.expires_at = "1530708000";
         stravaApi.token.refresh_token = "xyz";
-        stravaApi.tokenStore = tokenStore;
+        stravaApi.tokenStore(tokenStore);
 
         assertThat(stravaApi.getAthlete()).isEqualTo("testing");
         assertThat(stravaApi.token.expires_at).isEqualTo("1662093734");
@@ -111,6 +111,30 @@ public class StravaApiTest {
         } catch (Exception e) {
             assertThat(e.getMessage()).isEqualTo("Access token is empty");
         }
+    }
+
+    @Test
+    public void loadToken_doNothingWithoutTokenStore() {
+        stravaApi.tokenStore(null);
+        stravaApi.loadToken();
+        assertThat(stravaApi.token).isNull();
+    }
+
+    @Test
+    public void loadToken_withTokenStore_willEnrichToken() {
+        when(tokenStore.load()).thenReturn(getValidTokenResponse());
+        stravaApi.tokenStore(tokenStore);
+        stravaApi.loadToken();
+        assertThat(stravaApi.token.access_token).isEqualTo("471816b123b8ad4dd304c1cdf130aa50a12e559f");
+    }
+
+    @Test
+    public void test_withoutToken() {
+        stravaApi.token = null;
+        assertThat(stravaApi.withoutToken()).isTrue();
+        stravaApi.token = new StravaApi.Token();
+        stravaApi.token.access_token = "";
+        assertThat(stravaApi.withoutToken()).isTrue();
     }
 
     private String getValidTokenResponse() {
