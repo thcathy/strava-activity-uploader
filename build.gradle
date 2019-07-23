@@ -39,7 +39,14 @@ dependencies {
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.0.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:2.27.0'
     testImplementation 'com.github.stefanbirkner:system-rules:1.19.0'
+    testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.4.0'
+}
 
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
 
 jacocoTestReport {
