@@ -1,3 +1,0 @@
-FROM arm64v8/openjdk:11
-ADD ./release/strava-activity-uploader.jar /app.jar
-ENTRYPOINT ["java","-jar","/app.jar","-Xmx512m -XX:+UseConcMarkSweepGC -XX:+PrintGCDetails -XX:+PrintHeapAtGC"]

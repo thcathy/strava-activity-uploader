@@ -70,7 +70,6 @@ public class Application {
             get("/callback", (i, o) -> stravaHandler.callback(i, o));
             get("/login", (i, o) -> stravaHandler.openLogin(i, o));
             get("/athlete", (i, o) -> stravaHandler.getAthlete(i, o));
-            get("/athlete", (i, o) -> stravaHandler.getAthlete(i, o));
             get("/check-mail-and-upload", (i, o) -> stravaUploader.checkEmailAndUploadActivity());
         });
     }
