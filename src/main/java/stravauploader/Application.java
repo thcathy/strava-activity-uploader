@@ -66,6 +66,7 @@ public class Application {
     }
 
     private void setupHttpRequestHandler() {
+        get("/health", (i, o) -> "ok");
         path("/strava", () -> {
             get("/callback", (i, o) -> stravaHandler.callback(i, o));
             get("/login", (i, o) -> stravaHandler.openLogin(i, o));
