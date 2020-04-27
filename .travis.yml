@@ -1,0 +1,38 @@
+language: java
+os: linux
+jdk: openjdk11
+services:
+  - docker
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+matrix:
+  include:
+   - os: linux
+     arch: amd64
+     env:
+       - DOCKER_FILE=./docker/Dockerfile
+       - IMAGE_NAME=strava-activity-uploader
+   - os: linux
+     arch: arm64
+     env:
+       - DOCKER_FILE=./docker/Dockerfile-arm64
+       - IMAGE_NAME=strava-activity-uploader-arm64
+
+script:
+  - ./gradlew check
+  - ./gradlew assemble shadowJar
+
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: bash docker/docker_build_push.sh
+  on:
+    branch: master
