@@ -1,7 +1,7 @@
 # strava-activity-uploader
 > A server reading zip / gps file from email and upload to Strava periodically
 
-[![CircleCI](https://img.shields.io/circleci/build/github/thcathy/strava-activity-uploader/master.svg)](https://circleci.com/gh/thcathy/strava-activity-uploader/tree/master)
+[![Build Status](https://travis-ci.com/thcathy/strava-activity-uploader.svg?branch=master)](https://travis-ci.com/thcathy/strava-activity-uploader)
 [![codecov](https://codecov.io/gh/thcathy/strava-activity-uploader/branch/master/graph/badge.svg)](https://codecov.io/gh/thcathy/strava-activity-uploader)
 ![GitHub](https://img.shields.io/github/license/thcathy/strava-activity-uploader.svg)
 
@@ -48,7 +48,7 @@ Suggest to use an email address only for upload activity
 ## How to use?
 ### 1. Start the server. Either use a) docker or b) java jar 
 #### a. By docker (recommended)
-Run docker image "thcathy/strava-activity-uploader". Replace the required environment variables.  
+Run docker image "thcathy/strava-activity-uploader" or "thcathy/strava-activity-uploader-arm64" if you start in machine with arm64 CPU. Replace the required environment variables.  
 Add "CALLBACK_HOST=<your server host and port>" if you start the application in your server.
 ```
 docker run --name strava-activity-uploader \
