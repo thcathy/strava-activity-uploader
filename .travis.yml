@@ -29,6 +29,9 @@ matrix:
 script:
   - ./gradlew check
   - ./gradlew assemble shadowJar
+  
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 
 deploy:
   skip_cleanup: true
