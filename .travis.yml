@@ -28,6 +28,7 @@ matrix:
 
 script:
   - ./gradlew check
+  - ./gradlew jacocoTestReport
   - ./gradlew assemble shadowJar
   
 after_success:
