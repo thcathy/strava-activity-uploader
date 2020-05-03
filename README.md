@@ -28,7 +28,7 @@
 Register an email address on provider support IMAP protocol. e.g. Gmail, Yahoo! Mail, Outlook.com  
 Suggest to use an email address only for upload activity
 
-**If you are using Gmail, it must enable "Less secure app access" in account setting.** ([how-to](https://hotter.io/docs/email-accounts/secure-app-gmail/))
+**If you are using Gmail, you need to generate an "App password" ([how-to](https://support.google.com/accounts/answer/185833)) or enable "Less secure app access" in account setting ([how-to](https://hotter.io/docs/email-accounts/secure-app-gmail/)).** 
 
 ### 2. Create an app account in Strava Settings
 #### Step 1: Create a Strava account if you do not have one
